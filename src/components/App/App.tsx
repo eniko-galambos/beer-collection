@@ -1,18 +1,24 @@
 import React from 'react';
-import logo from '../../logo.svg';
 import './App.css';
-import { Typography } from '@mui/material';
+import { ThemeProvider } from '@mui/material';
+import theme from '../../theme';
+import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
+import Login from '../../pages/Login/Login';
+import routes from '../../routes';
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <Typography sx={{color: theme => theme.palette.primary.main}}>
-          Beer finder
-        </Typography>
-      </header>
-    </div>
+    <ThemeProvider theme={theme}>
+      <BrowserRouter>
+        <Routes>
+          <Route
+            path={routes.login}
+            element={<Login />}
+          />
+          <Route path="*" element={<Navigate to={routes.login} />} />
+        </Routes>
+      </BrowserRouter>
+    </ThemeProvider>
   );
 }
 
