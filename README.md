@@ -1,1 +1,1 @@
-# beershop
+# Beer collection
