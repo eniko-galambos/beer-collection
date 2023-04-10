@@ -9,6 +9,7 @@ import routes from '../../routes';
 import store from '../../redux/store/store';
 import Preload from '../Preload/Preload';
 import List from '../../pages/List/List';
+import Header from '../Header/Header';
 
 function App() {
   return (
@@ -21,13 +22,16 @@ function App() {
               path="*"
               element={
                 <Preload>
-                  <Routes>
-                    <Route path={routes.list} element={<List />}></Route>
-                    <Route
-                      path="*"
-                      element={<Navigate to={routes.list} />}
-                    ></Route>
-                  </Routes>
+                  <>
+                    <Header />
+                    <Routes>
+                      <Route path={routes.list} element={<List />}></Route>
+                      <Route
+                        path="*"
+                        element={<Navigate to={routes.list} />}
+                      ></Route>
+                    </Routes>
+                  </>
                 </Preload>
               }
             />

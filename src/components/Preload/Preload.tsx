@@ -1,5 +1,7 @@
+import { Navigate } from 'react-router-dom';
 import { getAuthData } from '../../redux/store/authData/authDataSlice';
 import { useAppSelector } from '../../redux/store/hooks';
+import routes from '../../routes';
 
 const Preload = ({
   children,
@@ -10,7 +12,7 @@ const Preload = ({
   const { isLoggedIn } = authData;
 
   if (!isLoggedIn) {
-    return null;
+    return <Navigate to={routes.login} />;
   } else {
     return children;
   }
