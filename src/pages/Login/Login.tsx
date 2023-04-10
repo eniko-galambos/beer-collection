@@ -14,9 +14,11 @@ import IconLock from '@mui/icons-material/Lock';
 import { useLoginMutation } from '../../redux/api/auth/auth';
 import { setAuthData } from '../../redux/store/authData/authDataSlice';
 import { useState } from 'react';
+import { useAppDispatch } from '../../redux/store/hooks';
 
 function Login() {
   const navigate = useNavigate();
+  const dispatch = useAppDispatch();
   const {
     control,
     handleSubmit,
@@ -35,10 +37,10 @@ function Login() {
     const response = await login({}).unwrap();
 
     if (response?.answer === 'yes') {
-      setAuthData({ isLoggedIn: true, name: getValues('name') });
-      // navigate('/list?page=1');
+      dispatch(setAuthData({ isLoggedIn: true, name: getValues('name') }));
+      navigate('/list?page=1');
     } else {
-      setAuthData({ isLoggedIn: false, name: '' });
+      dispatch(setAuthData({ isLoggedIn: false, name: '' }));
       setLoginError('This time you were unlucky, try again!');
     }
   };
