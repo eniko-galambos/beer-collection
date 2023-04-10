@@ -1,6 +1,7 @@
 import {
   Box,
   Button,
+  CircularProgress,
   FormControl,
   Grid,
   TextField,
@@ -8,17 +9,39 @@ import {
 } from '@mui/material';
 import { Controller, useForm } from 'react-hook-form';
 import imgBeers from '../../assets/beers.jpg';
-
+import { useNavigate } from 'react-router-dom';
 import IconLock from '@mui/icons-material/Lock';
+import { useLoginMutation } from '../../redux/api/auth/auth';
+import { setAuthData } from '../../redux/store/authData/authDataSlice';
+import { useState } from 'react';
 
 function Login() {
+  const navigate = useNavigate();
   const {
     control,
     handleSubmit,
-    formState: { errors, isSubmitted, isValid },
-  } = useForm();
+    getValues,
+    formState: { errors, isSubmitted, isValid, isDirty },
+  } = useForm<{ name: string }>({
+    defaultValues: { name: '' },
+  });
 
-  const onSubmit = () => {};
+  const [login, { isLoading }] = useLoginMutation({});
+
+  const [loginError, setLoginError] = useState('');
+
+  const onSubmit = async () => {
+    setLoginError('');
+    const response = await login({}).unwrap();
+
+    if (response?.answer === 'yes') {
+      setAuthData({ isLoggedIn: true, name: getValues('name') });
+      // navigate('/list?page=1');
+    } else {
+      setAuthData({ isLoggedIn: false, name: '' });
+      setLoginError('This time you were unlucky, try again!');
+    }
+  };
 
   return (
     <Grid container sx={{ height: '100vh', overflow: 'hidden' }}>
@@ -110,10 +133,18 @@ function Login() {
               type="submit"
               variant="contained"
               sx={{ mt: 3, pt: 1.5, pb: 1.5, pl: 8, pr: 8 }}
-              disabled={isSubmitted && !isValid}
+              disabled={(isSubmitted && !isValid) || !isDirty}
             >
-              Login
+              {isLoading && (
+                <CircularProgress size={24} color="secondary" sx={{ mr: 1 }} />
+              )}
+              {!isLoading && 'Login'}
             </Button>
+            {loginError && (
+              <Typography variant="body2" color="error" sx={{ mt: 2 }}>
+                {loginError}
+              </Typography>
+            )}
           </Box>
         </>
       </Grid>
