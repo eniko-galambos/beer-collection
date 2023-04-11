@@ -23,7 +23,7 @@ import routes from '../../routes';
 
 const List = () => {
   const navigate = useNavigate();
-  const [searchParams] = useSearchParams();
+  const [searchParams, setSearchParams] = useSearchParams();
 
   const [searchKey, setSearchKey] = useState('');
 
@@ -36,6 +36,7 @@ const List = () => {
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
     setSearchKey(event.target.value);
+    setSearchParams({ page: '1' });
   };
 
   const handleClickCard = (id: number) => {
