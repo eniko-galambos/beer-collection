@@ -13,7 +13,7 @@ import {
   CardContent,
 } from '@mui/material';
 import IconSearch from '@mui/icons-material/Search';
-import { KeyboardEvent, useState } from 'react';
+import { useState } from 'react';
 import { useListBeersQuery } from '../../redux/api/beers/beers';
 import { useSearchParams } from 'react-router-dom';
 import { Beer } from '../../redux/api/beers/types';
@@ -21,27 +21,52 @@ import Pagination from '../../components/Pagination/Pagination';
 import imgNoImage from '../../assets/no-image.jpg';
 
 const List = () => {
-  const [searchParams, setSearchParams] = useSearchParams();
+  const [searchParams] = useSearchParams();
+
+  const [searchKey, setSearchKey] = useState('');
 
   const { currentData, isFetching } = useListBeersQuery(
-    { page: Number(searchParams.get('page')) },
+    { page: Number(searchParams.get('page')), searchKey },
     {
       refetchOnMountOrArgChange: true,
     },
   );
 
-  const [searchKeyCurrentValue, setSearchKeyCurrentValue] = useState('');
-
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
-    setSearchKeyCurrentValue(event.target.value);
-  };
-
-  const handleSubmit = (): void => {
-    // TODO searchKeyCurrentValue
+    setSearchKey(event.target.value);
   };
 
   return (
     <Container maxWidth="md" sx={{ mt: 5, mb: 5 }}>
+      <Paper
+        sx={{
+          display: 'flex',
+          alignItems: 'center',
+          width: {
+            xs: '100%',
+            md: '300px',
+          },
+        }}
+      >
+        <InputBase
+          sx={{ ml: 1.5, flex: 1 }}
+          placeholder="Search"
+          inputProps={{
+            'aria-label': 'Search',
+          }}
+          onChange={handleChange}
+          value={searchKey}
+          autoFocus
+        />
+        <IconButton
+          type="button"
+          sx={{ p: '10px' }}
+          aria-label="Search"
+          color="primary"
+        >
+          <IconSearch />
+        </IconButton>
+      </Paper>
       {isFetching && (
         <Box
           sx={{
@@ -57,43 +82,6 @@ const List = () => {
       )}
       {!isFetching && currentData && (
         <Box>
-          <Box component="form">
-            <Paper
-              sx={{
-                display: 'flex',
-                alignItems: 'center',
-                width: {
-                  xs: '100%',
-                  md: '300px',
-                },
-              }}
-            >
-              <InputBase
-                sx={{ ml: 1.5, flex: 1 }}
-                placeholder="Search"
-                inputProps={{
-                  'aria-label': 'Search',
-                }}
-                onKeyUp={(e: KeyboardEvent<HTMLInputElement>) => {
-                  if (e.key === 'Enter') {
-                    e.preventDefault();
-                    handleSubmit();
-                  }
-                }}
-                onChange={handleChange}
-                value={searchKeyCurrentValue}
-              />
-              <IconButton
-                type="button"
-                sx={{ p: '10px' }}
-                aria-label="Search"
-                onClick={handleSubmit}
-                color="primary"
-              >
-                <IconSearch />
-              </IconButton>
-            </Paper>
-          </Box>
           <Box sx={{ mt: 4 }}>
             {currentData.length > 0 && (
               <>

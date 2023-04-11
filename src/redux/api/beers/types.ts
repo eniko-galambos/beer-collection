@@ -5,3 +5,9 @@ export type Beer = {
   description: string;
   tagline: string;
 };
+
+export type ListBeersParams = {
+  page: number;
+  per_page: number;
+  beer_name?: string;
+};
