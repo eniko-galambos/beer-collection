@@ -1,6 +1,5 @@
 import React from 'react';
 import { Provider } from 'react-redux';
-import './App.css';
 import { ThemeProvider } from '@mui/material';
 import theme from '../../theme';
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
