@@ -15,12 +15,14 @@ import {
 import IconSearch from '@mui/icons-material/Search';
 import { useState } from 'react';
 import { useListBeersQuery } from '../../redux/api/beers/beers';
-import { useSearchParams } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { Beer } from '../../redux/api/beers/types';
 import Pagination from '../../components/Pagination/Pagination';
 import imgNoImage from '../../assets/no-image.jpg';
+import routes from '../../routes';
 
 const List = () => {
+  const navigate = useNavigate();
   const [searchParams] = useSearchParams();
 
   const [searchKey, setSearchKey] = useState('');
@@ -34,6 +36,10 @@ const List = () => {
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
     setSearchKey(event.target.value);
+  };
+
+  const handleClickCard = (id: number) => {
+    navigate(`${routes.list}/${id}`);
   };
 
   return (
@@ -88,7 +94,7 @@ const List = () => {
                 <Grid container spacing={3}>
                   {currentData.map((beer: Beer) => (
                     <Grid item key={beer.id} xs={12} sm={6} md={4}>
-                      <Card>
+                      <Card onClick={() => handleClickCard(beer.id)}>
                         <CardActionArea>
                           <CardMedia
                             component="img"

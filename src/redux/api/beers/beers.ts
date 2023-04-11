@@ -1,9 +1,9 @@
 import api from '../api';
-import { ListBeersParams } from './types';
+import { Beer, ListBeersParams } from './types';
 
 const beersApi = api.injectEndpoints({
   endpoints: (build) => ({
-    listBeers: build.query<[], {}>({
+    listBeers: build.query<Beer[], {}>({
       query: (parameters: { page: number; searchKey: string }) => {
         const params: ListBeersParams = {
           page: parameters.page,
@@ -21,7 +21,15 @@ const beersApi = api.injectEndpoints({
         };
       },
     }),
+    getBeer: build.query<Beer[], {}>({
+      query: (parameters: { id: number }) => {
+        return {
+          url: `https://api.punkapi.com/v2/beers/${parameters.id}`,
+          method: 'GET',
+        };
+      },
+    }),
   }),
 });
 
-export const { useListBeersQuery } = beersApi;
+export const { useListBeersQuery, useGetBeerQuery } = beersApi;
