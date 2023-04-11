@@ -5,11 +5,18 @@ import {
   Paper,
   Box,
   CircularProgress,
+  Grid,
+  Typography,
+  Card,
+  CardActionArea,
+  CardMedia,
+  CardContent,
 } from '@mui/material';
 import IconSearch from '@mui/icons-material/Search';
 import { KeyboardEvent, useState } from 'react';
 import { useListBeersQuery } from '../../redux/api/beers/beers';
 import { useSearchParams } from 'react-router-dom';
+import { Beer } from '../../redux/api/beers/types';
 
 const List = () => {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -20,8 +27,6 @@ const List = () => {
       refetchOnMountOrArgChange: true,
     },
   );
-
-  console.log('currentData', currentData);
 
   const [searchKeyCurrentValue, setSearchKeyCurrentValue] = useState('');
 
@@ -48,7 +53,7 @@ const List = () => {
           <CircularProgress color="secondary" />
         </Box>
       )}
-      {!isFetching && (
+      {!isFetching && currentData && (
         <Box component="form">
           <Paper
             sx={{
@@ -85,6 +90,42 @@ const List = () => {
               <IconSearch />
             </IconButton>
           </Paper>
+          <Box sx={{ mt: 4 }}>
+            <Grid container spacing={3}>
+              {currentData.map((beer: Beer) => (
+                <Grid item key={beer.id} xs={12} sm={6} md={4}>
+                  <Card>
+                    <CardActionArea>
+                      <CardMedia
+                        component="img"
+                        height="180"
+                        image={beer.image_url}
+                        alt={beer.name}
+                        sx={{ objectFit: 'contain', pt: 4, pb: 4 }}
+                      />
+                      <CardContent>
+                        <Typography
+                          gutterBottom
+                          variant="h5"
+                          component="div"
+                          noWrap
+                        >
+                          {beer.name}
+                        </Typography>
+                        <Typography
+                          variant="body2"
+                          color="text.secondary"
+                          noWrap
+                        >
+                          {beer.tagline}
+                        </Typography>
+                      </CardContent>
+                    </CardActionArea>
+                  </Card>
+                </Grid>
+              ))}
+            </Grid>
+          </Box>
         </Box>
       )}
     </Container>
