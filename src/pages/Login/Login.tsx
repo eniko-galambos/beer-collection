@@ -135,7 +135,7 @@ function Login() {
               type="submit"
               variant="contained"
               sx={{ mt: 3, pt: 1.5, pb: 1.5, pl: 8, pr: 8 }}
-              disabled={(isSubmitted && !isValid) || !isDirty}
+              disabled={(isSubmitted && !isValid) || !isDirty || isLoading}
             >
               {isLoading && (
                 <CircularProgress size={24} color="secondary" sx={{ mr: 1 }} />
